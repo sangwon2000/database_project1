@@ -18,14 +18,24 @@
 <body>
 
     <%
-        DBManager dbManager = new DBManager();
-        String userId = request.getParameter("userId");
-        dbManager.updateStudentInfo(userId,condition);
 
-        out.println("<script>");
-        out.println("alert('변경이 완료되었습니다.')");
-        out.println("location.href='studentInfo.jsp?userId="+userId+"\'");
-        out.println("</script>");
+        DBManager dbManager = new DBManager();
+        String student_id = request.getParameter("student_id");
+        int result = dbManager.updateStudentInfo(student_id,condition);
+
+        if(result == -1) {
+            out.println("<script>");
+            out.println("history.back()");
+            out.println("alert('DB error')");
+            out.println("</script>");
+        }
+        else if(result == 0) {
+            out.println("<script>");
+            out.println("alert('변경이 완료되었습니다.')");
+            out.println("location.href='../studentInfo.jsp?student_id="+student_id+"\'");
+            out.println("</script>");
+        }
+
     %>
 
 </body>

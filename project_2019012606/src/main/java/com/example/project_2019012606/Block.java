@@ -4,28 +4,43 @@ import java.sql.ResultSet;
 
 public class Block {
 
+    private String type;
+    // day, time, space, classE, class
     private String name;
     private String color;
 
-    private int fontSize;
-    private int height;
 
-    public boolean isSpace() {
-        if(this.color == "white") return true;
-        else return false;
-    }
 
-    public Block(String name, String color, int fontSize, int height) {
+
+    public Block(String type, String name, String color) {
+        this.type = type;
         this.name = name;
         this.color = color;
-        this.fontSize = fontSize;
-        this.height = height;
+
+    }
+
+    public boolean isSpace() {
+        if(this.type.equals("space")) return true;
+        else return false;
     }
 
     public String printBlock() {
 
-        return String.format("<div style=\"background-color: %s; width: 100px; height: %dpx;" +
+        int fontSize = 20;
+        if(this.type.equals("class")) fontSize = 10;
+
+        int height = 130;
+        if(this.type.equals("day")) height = 30;
+
+        String color = this.color;
+        String name = this.name;
+        if(this.type.equals("space") || this.type.equals("classE")) {
+            color = "white";
+            name = "";
+        }
+
+        return String.format("<div style=\"background-color: %s; width: 130px; height: %dpx;" +
                 "font: %dpx; font-weight: bold; color: white;" +
-                "border:0.5px dotted gray;text-align: center;\">%s</div>\n",this.color,this.height,this.fontSize,this.name);
+                "border:0.5px dotted gray;text-align: center;\">%s</div>\n",color,height,fontSize,name);
     }
 }

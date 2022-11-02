@@ -21,39 +21,45 @@
 <%
     if(session.getAttribute("userId") != null) {
         out.println("<script>");
-        out.println("location.href = 'main.jsp'");
+        out.println("location.href = '../main.jsp'");
         out.println("</script>");
     }
-
 
     if(user.getUserId() == null || user.getUserPassword() == null) {
         out.println("<script>");
         out.println("alert('아이디와 비밀번호를 입력해주세요.')");
-        out.println("location.href = 'login.jsp'");
+        out.println("location.href = '../login.jsp'");
         out.println("</script>");
     }
     else {
         DBManager dbManager = new DBManager();
-        int key = dbManager.login(user);
+        int result = dbManager.login(user);
 
-        if(key == 1) {
-            session.setAttribute("userId", user.getUserId());
+        if(result == -1) {
             out.println("<script>");
-            out.println("location.href = 'main.jsp'");
+            out.println("alert('DB error')");
+            out.println("location.href = '../login.jsp'");
             out.println("</script>");
         }
 
-        else if(key == 2) {
-            session.setAttribute("userId", "admin");
-            out.println("<script>");
-            out.println("location.href = 'main.jsp'");
-            out.println("</script>");
-        }
-
-        else if(key == 0) {
+        else if(result == 0) {
             out.println("<script>");
             out.println("alert('아이디 또는 비밀번호가 틀립니다.')");
             out.println("history.back()");
+            out.println("</script>");
+        }
+
+        else if(result == 1) {
+            session.setAttribute("userId", "admin");
+            out.println("<script>");
+            out.println("location.href = '../main.jsp'");
+            out.println("</script>");
+        }
+
+        else if(result == 2) {
+            session.setAttribute("userId", user.getUserId());
+            out.println("<script>");
+            out.println("location.href = '../main.jsp'");
             out.println("</script>");
         }
 

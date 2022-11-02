@@ -22,28 +22,26 @@ public class Schedule {
 
             this.matrix = new Block[25][7];
 
-            int dayHeight = 20;
-            int height = 70;
 
-            this.matrix[0][0] = new Block("", "black", 20, dayHeight);
-            this.matrix[0][1] = new Block("월", "gray", 20,dayHeight);
-            this.matrix[0][1] = new Block("월", "gray", 20,dayHeight);
-            this.matrix[0][2] = new Block("화", "gray", 20,dayHeight);
-            this.matrix[0][3] = new Block("수", "gray", 20,dayHeight);
-            this.matrix[0][4] = new Block("목", "gray", 20,dayHeight);
-            this.matrix[0][5] = new Block("금", "gray", 20,dayHeight);
-            this.matrix[0][6] = new Block("토", "gray", 20,dayHeight);
+
+            this.matrix[0][0] = new Block("day","", "black");
+            this.matrix[0][1] = new Block("day","월", "gray");
+            this.matrix[0][2] = new Block("day","화", "gray");
+            this.matrix[0][3] = new Block("day","수", "gray");
+            this.matrix[0][4] = new Block("day","목", "gray");
+            this.matrix[0][5] = new Block("day","금", "gray");
+            this.matrix[0][6] = new Block("day","토", "gray");
 
             for(int i=1; i<25; i++) {
                 int hour = (i-1)/2;
                 String minute = (i % 2 == 1) ? ":00" : ":30";
-                this.matrix[i][0] = new Block(hour + minute, "gray", 20,height);
+                this.matrix[i][0] = new Block("time",hour + minute, "gray");
             }
 
 
             for(int k=1;k<25; k++) {
                 for(int g=1;g<7; g++) {
-                    this.matrix[k][g] = new Block("", "white", 10,height);
+                    this.matrix[k][g] = new Block("space","", "white");
                 }
             }
 
@@ -54,12 +52,13 @@ public class Schedule {
                 int day = Integer.parseInt(rs.getString("day"));
                 int begin = timeToIndex(rs.getString("begin"));
                 int end = timeToIndex(rs.getString("end"));
+                String type = "class";
 
-                if(day == 0) continue;
+                if(day == 6 || end > 13) type = "classE";
 
-                this.matrix[begin][day] = new Block(name,colorList[i],10,height);
+                this.matrix[begin][day] = new Block(type,name,colorList[i]);
                 for(int j=begin+1; j<end; j++)
-                    this.matrix[j][day] = new Block("",colorList[i],10,height);
+                    this.matrix[j][day] = new Block(type,"",colorList[i]);
 
                 i++;
                 if(i == colorList.length) i = 0;
@@ -72,11 +71,11 @@ public class Schedule {
     }
 
     public String printSchedule() {
-        String result = "<div style=\"display:flex; flex-direction:column\">\n";
+        String result = "<div style=\"display:flex; flex-direction:column; justify-content:center\">\n";
 
-        for(int k=0;k<25; k++) {
-            result += "<div style=\"display:flex\">\n";
-            for(int g=0;g<7; g++) {
+        for(int k=0;k<13; k++) {
+            result += "<div style=\"display:flex; justify-content:center\">\n";
+            for(int g=0;g<6; g++) {
                 result += this.matrix[k][g].printBlock();
             }
             result += "</div>\n";
@@ -89,7 +88,6 @@ public class Schedule {
         int hour = Integer.parseInt(time.substring(0,2));
         int minute = 0;
         if(Integer.parseInt(time.substring(3,5)) == 30) minute = 1;
-        System.out.println(hour*2 + minute + 1);
         return hour*2 + minute + 1;
     }
 

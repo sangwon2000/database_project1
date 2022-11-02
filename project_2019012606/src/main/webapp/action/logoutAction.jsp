@@ -16,7 +16,7 @@
             session.removeAttribute("userId");
 
         out.println("<script>");
-        out.println("location.href = 'login.jsp'");
+        out.println("location.href = '../login.jsp'");
         out.println("</script>");
     %>
 </body>
